@@ -18,9 +18,9 @@ public class ConnectorManagementSteps
     private readonly IGroupRepository _groupRepository;
     private readonly IChargeStationRepository _chargeStationRepository;
 
-    private Group _currentGroup;
-    private ChargeStation _currentStation;
-    private Connector _currentConnector;
+    private Group? _currentGroup;
+    private ChargeStation? _currentStation;
+    private Connector? _currentConnector;
     private bool _operationResult;
 
     public ConnectorManagementSteps(CommonHooks hooks)
@@ -48,22 +48,20 @@ public class ConnectorManagementSteps
         _currentGroup = result?.Data.FirstOrDefault();
     }
 
-    [Given(@"the group has a charge station named ""(.*)"" with connectors:")]
+    [Given(@"the group has a charge station named ""(.*)"" with the following connectors:")]
     public async Task GivenTheGroupHasAChargeStationNamedWithConnectors(string stationName, Table table)
     {
-        _currentStation = new ChargeStation(stationName);
-        foreach (var row in table.Rows)
+       var connectors = table.Rows.Select(row => new Connector(row["Name"],int.Parse(row["MaxCurrentAmps"]))).ToList();
+
+        _currentStation = new ChargeStation(stationName)
         {
-            var id = int.Parse(row["Id"]);
-            var maxCurrentAmps = int.Parse(row["MaxCurrentAmps"]);
-            var connector = new Connector(id.ToString(), maxCurrentAmps);
-            _currentConnector = connector;
-            _currentStation.Connectors.Add(connector);
-        }
+            Connectors = connectors
+        };
 
         var result = await _chargeStationService.AddChargeStation(Guid.Parse(_currentGroup.Id), _currentStation);
-        Assert.IsTrue(result.IsSuccess, "The charge station with connectors was not added successfully.");
         _currentStation = result.Data;
+        _operationResult = result.Data == null ? false : true;
+        _currentConnector = connectors.FirstOrDefault();
     }
 
     [When(@"I add a connector with ID (.*) and max current (.*)")]

@@ -96,12 +96,14 @@ namespace SmartChargingTEST.Features
 #line hidden
                 TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
-                            "MaxCurrentAmps"});
+                            "MaxCurrentAmps",
+                            "Name"});
                 table5.AddRow(new string[] {
                             "1",
-                            "50"});
+                            "50",
+                            "C"});
 #line 8
-    testRunner.And("the group has a charge station named \"Station A\" with connectors:", ((string)(null)), table5, "And ");
+    testRunner.And("the group has a charge station named \"Station B\" with the following connectors:", ((string)(null)), table5, "And ");
 #line hidden
 #line 11
     testRunner.When("I add a connector with ID 2 and max current 50", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -135,12 +137,14 @@ namespace SmartChargingTEST.Features
 #line hidden
                 TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
-                            "MaxCurrentAmps"});
+                            "MaxCurrentAmps",
+                            "Name"});
                 table6.AddRow(new string[] {
                             "1",
-                            "50"});
+                            "50",
+                            "C"});
 #line 16
-    testRunner.And("the group has a charge station named \"Station A\" with connectors:", ((string)(null)), table6, "And ");
+    testRunner.And("the group has a charge station named \"Station B\" with the following connectors:", ((string)(null)), table6, "And ");
 #line hidden
 #line 19
     testRunner.When("I update the connector\'s max current to 60", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -174,12 +178,14 @@ namespace SmartChargingTEST.Features
 #line hidden
                 TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
-                            "MaxCurrentAmps"});
+                            "MaxCurrentAmps",
+                            "Name"});
                 table7.AddRow(new string[] {
                             "1",
-                            "50"});
+                            "50",
+                            "C"});
 #line 24
-    testRunner.And("the group has a charge station named \"Station A\" with connectors:", ((string)(null)), table7, "And ");
+    testRunner.And("the group has a charge station named \"Station B\" with the following connectors:", ((string)(null)), table7, "And ");
 #line hidden
 #line 27
     testRunner.When("I remove the connector with ID 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -213,12 +219,14 @@ namespace SmartChargingTEST.Features
 #line hidden
                 TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
-                            "MaxCurrentAmps"});
+                            "MaxCurrentAmps",
+                            "Name"});
                 table8.AddRow(new string[] {
                             "1",
-                            "50"});
+                            "50",
+                            "C"});
 #line 32
-    testRunner.And("the group has a charge station named \"Station A\" with connectors:", ((string)(null)), table8, "And ");
+    testRunner.And("the group has a charge station named \"Station B\" with the following connectors:", ((string)(null)), table8, "And ");
 #line hidden
 #line 35
     testRunner.When("I add a connector with ID 2 and max current 60", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
