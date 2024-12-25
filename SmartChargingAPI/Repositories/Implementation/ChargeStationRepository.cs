@@ -23,12 +23,18 @@ namespace SmartChargingAPI.Repositories.Implementation
             return group?.ChargeStations.FirstOrDefault(cs => cs.Id == stationId.ToString());
         }
 
-        public async Task<bool> UpdateChargeStationsAsync(Guid groupId, List<ChargeStation> updatedStations)
+        public async Task<ChargeStation?> UpdateChargeStationsAsync(Guid groupId, List<ChargeStation> updatedStations)
         {
             var updateDefinition = Builders<Group>.Update.Set(g => g.ChargeStations, updatedStations);
             var result = await _groupCollection.UpdateOneAsync(g => g.Id == groupId.ToString(), updateDefinition);
 
-            return result.ModifiedCount > 0;
+            if (result.ModifiedCount > 0)
+            {
+                var updatedStation = updatedStations.FirstOrDefault();
+                return updatedStation;
+            }
+
+            return null;
         }
 
         public async Task<bool> AddStationAsync(Guid groupId, ChargeStation station)

@@ -94,10 +94,19 @@ namespace SmartChargingTEST.Features
 #line 7
     testRunner.Given("I have a group with name \"Group A\" and capacity 150", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
+                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                            "MaxCurrentAmps",
+                            "Name"});
+                table1.AddRow(new string[] {
+                            "10",
+                            "C"});
+                table1.AddRow(new string[] {
+                            "20",
+                            "D"});
 #line 8
-    testRunner.When("I add a charge station named \"Station A\" with capacity 50", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When("the group has a charge station named \"Station A\" with the following connectors:", ((string)(null)), table1, "When ");
 #line hidden
-#line 9
+#line 12
     testRunner.Then("the station should be added successfully", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -111,7 +120,7 @@ namespace SmartChargingTEST.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update a charge station\'s name", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 11
+#line 14
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -121,16 +130,22 @@ namespace SmartChargingTEST.Features
             else
             {
                 this.ScenarioStart();
-#line 12
+#line 15
     testRunner.Given("I have a group with name \"Group A\" and capacity 150", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 13
-    testRunner.And("the group has a charge station named \"Station A\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                            "MaxCurrentAmps",
+                            "Name"});
+                table2.AddRow(new string[] {
+                            "10",
+                            "C"});
+#line 16
+    testRunner.And("the group has a charge station named \"Station A\" with the following connectors:", ((string)(null)), table2, "And ");
 #line hidden
-#line 14
+#line 19
     testRunner.When("I update the station\'s name to \"Updated Station\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 15
+#line 20
     testRunner.Then("the station\'s name should be \"Updated Station\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -144,7 +159,7 @@ namespace SmartChargingTEST.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove a charge station", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 17
+#line 22
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -154,16 +169,22 @@ namespace SmartChargingTEST.Features
             else
             {
                 this.ScenarioStart();
-#line 18
+#line 23
     testRunner.Given("I have a group with name \"Group A\" and capacity 150", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 19
-    testRunner.And("the group has a charge station named \"Station A\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                            "MaxCurrentAmps",
+                            "Name"});
+                table3.AddRow(new string[] {
+                            "10",
+                            "C"});
+#line 24
+    testRunner.And("the group has a charge station named \"Station A\" with the following connectors:", ((string)(null)), table3, "And ");
 #line hidden
-#line 20
+#line 27
     testRunner.When("I remove the station", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 21
+#line 28
     testRunner.Then("the station should no longer exist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -177,7 +198,7 @@ namespace SmartChargingTEST.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Delete a charge station and ensure all associated connectors are removed", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 23
+#line 30
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -187,31 +208,28 @@ namespace SmartChargingTEST.Features
             else
             {
                 this.ScenarioStart();
-#line 24
+#line 31
     testRunner.Given("I have a group with name \"Group A\" and capacity 150", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 25
-    testRunner.And("the group has a charge station named \"Station A\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                            "MaxCurrentAmps",
+                            "Name"});
+                table4.AddRow(new string[] {
+                            "10",
+                            "C"});
+                table4.AddRow(new string[] {
+                            "20",
+                            "D"});
+#line 32
+    testRunner.And("the group has a charge station named \"Station A\" with the following connectors:", ((string)(null)), table4, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
-                            "MaxCurrentAmps"});
-                table1.AddRow(new string[] {
-                            "1",
-                            "10"});
-                table1.AddRow(new string[] {
-                            "2",
-                            "20"});
-#line 26
-    testRunner.And("the charge station \"Station A\" has the following connectors:", ((string)(null)), table1, "And ");
-#line hidden
-#line 30
+#line 36
     testRunner.When("I remove the station", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 31
+#line 37
     testRunner.Then("the station should no longer exist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 32
+#line 38
     testRunner.And("no connectors should remain in the group", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }

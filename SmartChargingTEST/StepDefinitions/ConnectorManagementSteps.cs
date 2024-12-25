@@ -43,24 +43,34 @@ public class ConnectorManagementSteps
     [Given(@"I have a group with name ""(.*)"" and capacity (.*)")]
     public async Task GivenIHaveAGroupWithNameAndCapacity(string name, int capacity)
     {
-        var result = await _groupService.AddGroup(new Group(name, capacity));
-        _currentGroup = result.Data;
+        var groupList = new List<Group> { new Group(name, capacity) };
+        var result = await _groupService.AddGroup(groupList);
+        _currentGroup = result?.Data.FirstOrDefault();
     }
 
-    [Given(@"the group has a charge station named ""(.*)""")]
-    public async Task GivenTheGroupHasAChargeStationNamed(string stationName)
+    [Given(@"the group has a charge station named ""(.*)"" with connectors:")]
+    public async Task GivenTheGroupHasAChargeStationNamedWithConnectors(string stationName, Table table)
     {
         _currentStation = new ChargeStation(stationName);
-        await _chargeStationService.AddChargeStation(new Guid(_currentGroup.Id), _currentStation);
+        foreach (var row in table.Rows)
+        {
+            var id = int.Parse(row["Id"]);
+            var maxCurrentAmps = int.Parse(row["MaxCurrentAmps"]);
+            var connector = new Connector(id.ToString(), maxCurrentAmps);
+            _currentConnector = connector;
+            _currentStation.Connectors.Add(connector);
+        }
+
+        var result = await _chargeStationService.AddChargeStation(Guid.Parse(_currentGroup.Id), _currentStation);
+        Assert.IsTrue(result.IsSuccess, "The charge station with connectors was not added successfully.");
+        _currentStation = result.Data;
     }
 
     [When(@"I add a connector with ID (.*) and max current (.*)")]
     public async Task WhenIAddAConnectorWithIDAndMaxCurrent(int id, int maxCurrent)
     {
-        var connector = new Connector{
-            MaxCurrentAmps=maxCurrent,
-        };
-        var result = await _connectorService.AddConnector(new Guid(_currentStation.Id), connector);
+        var connector = new Connector(id.ToString(), maxCurrent);
+        var result = await _connectorService.AddConnector(Guid.Parse(_currentStation.Id), connector);
         _currentConnector = result.Data;
         _operationResult = _currentConnector != null;
     }
@@ -74,10 +84,8 @@ public class ConnectorManagementSteps
     [Given(@"the station has a connector with ID (.*) and max current (.*)")]
     public async Task GivenTheStationHasAConnectorWithIDAndMaxCurrent(int id, int maxCurrent)
     {
-        var connector = new Connector{
-            MaxCurrentAmps=maxCurrent,
-        };
-        var result = await _connectorService.AddConnector(new Guid(_currentStation.Id), connector);
+        var connector = new Connector(id.ToString(), maxCurrent);
+        var result = await _connectorService.AddConnector(Guid.Parse(_currentStation.Id), connector);
         _currentConnector = result?.Data;
         Assert.IsNotNull(_currentConnector, "The connector was not added to the station.");
     }
@@ -86,7 +94,7 @@ public class ConnectorManagementSteps
     public async Task WhenIUpdateTheConnectorSMaxCurrentTo(int newMaxCurrent)
     {
         _currentConnector.MaxCurrentAmps = newMaxCurrent;
-        var result = await _connectorService.UpdateConnector(new Guid(_currentStation.Id), _currentConnector);
+        var result = await _connectorService.UpdateConnector(Guid.Parse(_currentStation.Id), _currentConnector);
         _operationResult = result.IsSuccess;
     }
 
@@ -99,14 +107,14 @@ public class ConnectorManagementSteps
     [When(@"I remove the connector with ID (.*)")]
     public async Task WhenIRemoveTheConnectorWithID(int id)
     {
-        var result = await _connectorService.RemoveConnector(new Guid(_currentStation.Id), id);
+        var result = await _connectorService.RemoveConnector(Guid.Parse(_currentStation.Id), id);
         _operationResult = result.IsSuccess;
     }
 
     [Then(@"the connector should no longer exist")]
     public async Task ThenTheConnectorShouldNoLongerExist()
     {
-        var group = await _groupService.GetGroupById(new Guid(_currentGroup.Id));
+        var group = await _groupService.GetGroupById(Guid.Parse(_currentGroup.Id));
         var station = group?.Data?.ChargeStations.FirstOrDefault(s => s.Id == _currentStation.Id);
         var connectorExists = station?.Connectors.Any(c => c.Id == _currentConnector.Id);
         Assert.IsFalse(connectorExists, "The connector still exists.");

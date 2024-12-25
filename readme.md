@@ -19,6 +19,7 @@ It utilizes **MongoDB** as the backend database and is implemented using **.NET 
 
 - This project uses **MongoDB Atlas**. Ensure your connection string is valid (string in appsettings.json file is valid).
 - Swagger documentation is available for API exploration.
+- Some data in database already inserted for you to test.
 
 ---
 
@@ -29,7 +30,7 @@ It utilizes **MongoDB** as the backend database and is implemented using **.NET 
 
 ### Default MongoDB Configuration
 
-No local MongoDB setup is required for this connection. However, if you need to test locally, ensure MongoDB is installed and running.
+No local MongoDB setup is required for this connection. 
 
 ---
 ## Project Structure
@@ -56,7 +57,7 @@ No local MongoDB setup is required for this connection. However, if you need to 
     ```
 4. Access the API documentation at:
     ```
-    (http://localhost:5043/swagger/index.html)
+    http://localhost:5043/swagger/index.html
     ```
 
 ---
@@ -86,10 +87,12 @@ Tests include:
 - **Endpoint**: `POST /api/groups`
 - **Request Body**:
     ```json
-    {
-      "name": "Group Name",
-      "capacityAmps": 100
-    }
+    [
+      {
+        "name": "Group Name",
+        "capacityAmps": 100
+      }
+    ]
     ```
 - **Response**: `200 OK`
 
@@ -123,7 +126,15 @@ Tests include:
 - **Request Body**:
     ```json
     {
-      "name": "Station Name"
+      "name": "Station Name",
+      "connectors": [
+        {
+          "maxCurrentAmps": 50
+        },
+        {
+          "maxCurrentAmps": 30
+        }
+      ]
     }
     ```
 - **Response**: `200 OK`
@@ -171,4 +182,3 @@ Tests include:
 #### Delete Connector
 - **Endpoint**: `DELETE /api/stations/{stationId}/connectors/{connectorId}`
 - **Response**: `200 OK`
-

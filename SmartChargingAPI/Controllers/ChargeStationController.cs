@@ -34,7 +34,7 @@ public class ChargeStationController : ControllerBase
         {
             _logger.LogInformation("Successfully added charge station {StationId} to group {GroupId}", stationRequest.Id, groupId);
 
-            var response = _mapper.Map<ChargeStationResponseDto>(stationRequest);
+            var response = _mapper.Map<ChargeStationResponseDto>(stationResult.Data);
             return Ok(response);
         }
 
@@ -60,7 +60,7 @@ public class ChargeStationController : ControllerBase
     }
 
     [HttpPut("{stationId}")]
-    public async Task<IActionResult> UpdateStation(Guid stationId, [FromBody] ChargeStationRequestDto updatedStationDto)
+    public async Task<IActionResult> UpdateStation(Guid stationId, [FromBody] ChargeStationUpdateRequestDto updatedStationDto)
     {
         _logger.LogInformation("Updating charge station {StationId} with request: {@UpdatedStationDto}", stationId, updatedStationDto);
 

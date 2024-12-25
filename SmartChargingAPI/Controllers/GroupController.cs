@@ -20,22 +20,22 @@ public class GroupController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateGroup([FromBody] GroupRequestDto groupRequestDto)
+    public async Task<IActionResult> CreateGroup([FromBody] List<GroupRequestDto> groupRequestDto)
     {
-        _logger.LogInformation("Attempting to create a group with Name: {Name} and Capacity: {CapacityAmps}", groupRequestDto.Name, groupRequestDto.CapacityAmps);
+        _logger.LogInformation("Attempting to create a group.");
 
-        var groupRequest = _mapper.Map<Group>(groupRequestDto);
+        var groupRequest = _mapper.Map<List<Group>>(groupRequestDto);
 
         var createdGroup = await _groupService.AddGroup(groupRequest);
         if (createdGroup.IsSuccess)
         {
-            _logger.LogInformation("Group created successfully with ID: {GroupId}", createdGroup?.Data?.Id);
+            _logger.LogInformation("Groups created successfully");
 
-            var response = _mapper.Map<GroupResponseDto>(createdGroup?.Data);
+            var response = _mapper.Map<List<GroupResponseDto>>(createdGroup?.Data);
             return Ok(response);
         }
 
-        _logger.LogWarning(createdGroup.Message, groupRequestDto.Name);
+        _logger.LogWarning(createdGroup.Message);
         return BadRequest(createdGroup.Message);
     }
 

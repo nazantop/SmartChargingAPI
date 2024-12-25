@@ -8,7 +8,7 @@ public class Group: IEntity
     public string Id { get; set;} = Guid.NewGuid().ToString();
     public string Name { get; set; }
     public int CapacityAmps { get; set; }
-    public List<ChargeStation> ChargeStations { get; set;} = [];
+    public List<ChargeStation> ChargeStations { get; set;} = new();
 
     public Group(string name, int capacityAmps)
     {

@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using SmartChargingAPI.Helpers;
 using SmartChargingAPI.Helpers.Validations;
 using SmartChargingAPI.IServices;
 using SmartChargingAPI.Models;
@@ -63,8 +62,8 @@ namespace SmartChargingAPI.Services
                     return ValidationResult<Connector>.Failure(validationMessage);
                 }
 
-                var updateSuccess = await _chargeStationRepository.UpdateChargeStationsAsync(Guid.Parse(group.Id), group.ChargeStations);
-                if (updateSuccess)
+                var updateChargeStations = await _chargeStationRepository.UpdateChargeStationsAsync(Guid.Parse(group.Id), group.ChargeStations);
+                if (updateChargeStations != null)
                 {
                     _logger.LogInformation("Connector added successfully to station {StationId}.", stationId);
                     return ValidationResult<Connector>.Success(newConnector);
@@ -105,8 +104,8 @@ namespace SmartChargingAPI.Services
                     return ValidationResult<bool>.Failure(validationMessage);
                 }
 
-                var updateSuccess = await _chargeStationRepository.UpdateChargeStationsAsync(Guid.Parse(group.Id), group.ChargeStations);
-                if (updateSuccess)
+                var updateChargeStations = await _chargeStationRepository.UpdateChargeStationsAsync(Guid.Parse(group.Id), group.ChargeStations);
+                if (updateChargeStations != null)
                 {
                     _logger.LogInformation("Connector updated successfully.");
                     return ValidationResult<bool>.Success(true);
@@ -139,8 +138,8 @@ namespace SmartChargingAPI.Services
             {
                 station.Connectors.RemoveAll(c => c.Id == connectorId.ToString());
 
-                var updateSuccess = await _chargeStationRepository.UpdateChargeStationsAsync(Guid.Parse(group.Id), group.ChargeStations);
-                if (updateSuccess)
+                var updateChargeStations = await _chargeStationRepository.UpdateChargeStationsAsync(Guid.Parse(group.Id), group.ChargeStations);
+                if (updateChargeStations != null)
                 {
                     _logger.LogInformation("Connector removed successfully.");
                     return ValidationResult<bool>.Success(true);

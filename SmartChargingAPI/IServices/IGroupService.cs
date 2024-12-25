@@ -4,7 +4,7 @@ using SmartChargingAPI.Models.Common;
 namespace SmartChargingAPI.IServices;
 public interface IGroupService
 {
-    Task<ValidationResult<Group>> AddGroup(Group group);
+    Task<ValidationResult<List<Group>>> AddGroup(List<Group> group);
     Task<ValidationResult<bool>> RemoveGroup(Guid groupId);
     Task<ValidationResult<List<Group>>> GetGroups();
     Task<ValidationResult<Group?>> GetGroupById(Guid groupId);

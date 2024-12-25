@@ -22,26 +22,52 @@ public class ChargeStationService : IChargeStationService
         _logger.LogInformation("ChargeStationService initialized.");
     }
 
-    public async Task<ValidationResult<ChargeStation>> AddChargeStation(Guid groupId, ChargeStation station)
+    public async Task<ValidationResult<ChargeStation>> AddChargeStation(Guid groupId, ChargeStation chargeStation)
     {
-        _logger.LogInformation("Attempting to add charge station to group {GroupId}.", groupId);
+        _logger.LogInformation("Attempting to add charge station to group {GroupId} with connectors.", groupId);
 
         var group = await _groupRepository.GetByIdAsync(groupId);
-
         var validationMessage = GroupValidation.ValidateGroup(group, _logger);
         if (validationMessage != null) return ValidationResult<ChargeStation>.Failure(validationMessage);
 
-        var updateSuccess = await _chargeStationRepository.AddStationAsync(groupId, station);
+        validationMessage = ConnectorValidation.ValidateConnectorCount(chargeStation.Connectors, _logger);
+        if (validationMessage != null) return ValidationResult<ChargeStation>.Failure(validationMessage);
 
-        if (updateSuccess)
+        var newStation = new ChargeStation(chargeStation.Name);
+        var totalGroupCapacity = group?.ChargeStations
+            .SelectMany(cs => cs.Connectors)
+            .Sum(c => c.MaxCurrentAmps) ?? 0;
+
+        foreach (var connectorRequest in chargeStation.Connectors)
         {
-            _logger.LogInformation("Charge station added successfully to group {GroupId}.", groupId);
-            return ValidationResult<ChargeStation>.Success(station);
+            validationMessage = ConnectorValidation.ValidateConnectorMaxCurrent(connectorRequest, _logger);
+            if (validationMessage != null) return ValidationResult<ChargeStation>.Failure(validationMessage);
+
+            validationMessage = ConnectorValidation.ValidateAddingConnectorExceedsCapacity(
+                totalGroupCapacity,
+                connectorRequest.MaxCurrentAmps,
+                group.CapacityAmps,
+                _logger);
+            if (validationMessage != null) return ValidationResult<ChargeStation>.Failure(validationMessage);
+
+            var connectorId = (newStation.Connectors.Count + 1).ToString();
+            newStation.Connectors.Add(new Connector(connectorId, connectorRequest.MaxCurrentAmps));
+            totalGroupCapacity += connectorRequest.MaxCurrentAmps;
         }
 
-        _logger.LogWarning("Failed to update group {GroupId} when adding charge station.", groupId);
+        group.ChargeStations.Add(newStation);
+
+        var updateChargeStations = await _chargeStationRepository.UpdateChargeStationsAsync(groupId, group.ChargeStations);
+        if (updateChargeStations != null)
+        {
+            _logger.LogInformation("Charge station with connectors added successfully to group {GroupId}.", groupId);
+            return ValidationResult<ChargeStation>.Success(newStation);
+        }
+
         return ValidationResult<ChargeStation>.Failure("Failed to update group when adding charge station.");
     }
+
+
 
     public async Task<ValidationResult<bool>> RemoveChargeStation(Guid stationId)
     {
@@ -74,9 +100,9 @@ public class ChargeStationService : IChargeStationService
         
         station.Name = updatedStation.Name;
 
-        var updateSuccess = await _chargeStationRepository.UpdateChargeStationsAsync(Guid.Parse(group.Id), group.ChargeStations);
+        var updateChargeStations = await _chargeStationRepository.UpdateChargeStationsAsync(Guid.Parse(group.Id), group.ChargeStations);
 
-        if (updateSuccess)
+        if (updateChargeStations != null)
         {
             _logger.LogInformation("Charge station {StationId} updated successfully to name {NewName}.", stationId, updatedStation.Name);
             return ValidationResult<bool>.Success(true);

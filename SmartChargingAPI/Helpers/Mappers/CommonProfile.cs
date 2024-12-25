@@ -15,8 +15,11 @@ namespace SmartChargingAPI.Helpers.Mappers;
             CreateMap<ChargeStation, ChargeStationResponseDto>()
                 .ForMember(dest => dest.Connectors, opt => opt.MapFrom(src => src.Connectors));
 
-            CreateMap<ChargeStationRequestDto, ChargeStation>();
-            
+            CreateMap<ChargeStationRequestDto, ChargeStation>()
+                .ForMember(dest => dest.Connectors, opt => opt.MapFrom(src => src.Connectors));
+
+            CreateMap<ChargeStationUpdateRequestDto, ChargeStation>();
+
             CreateMap<Connector, ConnectorResponseDto>();
 
             CreateMap<ConnectorRequestDto, Connector>()

@@ -4,7 +4,6 @@ namespace SmartChargingAPI.Helpers.Validations
 {
     public static class ConnectorValidation
     {
-
         public static string? ValidateConnectorLimit(ChargeStation station, Guid stationId, ILogger logger)
         {
             if (station.Connectors.Count >= 5)
@@ -17,13 +16,15 @@ namespace SmartChargingAPI.Helpers.Validations
             return null;
         }
 
-       public static string? ValidateGroupCapacity(Group? group, ChargeStation? station, ILogger logger)
+        public static string? ValidateGroupCapacity(Group? group, ChargeStation? station, ILogger logger)
         {
-            if(group == null || station == null){
-                var errorMessage =  "Group or station couldn't found.";
+            if (group == null || station == null)
+            {
+                var errorMessage = "Group or station couldn't be found.";
                 logger.LogWarning(errorMessage);
                 return errorMessage;
             }
+
             var totalCapacity = group.ChargeStations
                 .SelectMany(cs => cs.Connectors)
                 .Sum(c => c.MaxCurrentAmps);
@@ -42,7 +43,43 @@ namespace SmartChargingAPI.Helpers.Validations
         {
             if (station == null || station.Connectors.All(c => c.Id != connectorId))
             {
-                var errorMessage = $"Connector {connectorId} not found in station {station.Id}.";
+                var errorMessage = $"Connector {connectorId} not found in station {station?.Id}.";
+                logger.LogWarning(errorMessage);
+                return errorMessage;
+            }
+
+            return null;
+        }
+
+        public static string? ValidateConnectorCount(List<Connector>? connectors, ILogger logger)
+        {
+            if (connectors == null || connectors.Count < 1 || connectors.Count > 5)
+            {
+                var errorMessage = "A charge station must have between 1 and 5 connectors.";
+                logger.LogWarning(errorMessage);
+                return errorMessage;
+            }
+
+            return null;
+        }
+
+        public static string? ValidateConnectorMaxCurrent(Connector connector, ILogger logger)
+        {
+            if (connector.MaxCurrentAmps <= 0)
+            {
+                var errorMessage = $"Connector max current must be greater than zero. Provided: {connector.MaxCurrentAmps}";
+                logger.LogWarning(errorMessage);
+                return errorMessage;
+            }
+
+            return null;
+        }
+
+        public static string? ValidateAddingConnectorExceedsCapacity(int totalGroupCapacity, int maxCurrentAmps, int groupCapacity, ILogger logger)
+        {
+            if (totalGroupCapacity + maxCurrentAmps > groupCapacity)
+            {
+                var errorMessage = $"Adding connector exceeds group capacity. Group capacity: {groupCapacity}, Total after addition: {totalGroupCapacity + maxCurrentAmps}.";
                 logger.LogWarning(errorMessage);
                 return errorMessage;
             }

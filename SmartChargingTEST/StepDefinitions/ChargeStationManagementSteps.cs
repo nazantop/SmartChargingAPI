@@ -17,8 +17,8 @@ public class ChargeStationManagementSteps
     private readonly IGroupRepository _groupRepository;
     private readonly IChargeStationRepository _chargeStationRepository;
 
-    private Group _currentGroup;
-    private ChargeStation _currentStation;
+    private Group? _currentGroup;
+    private ChargeStation? _currentStation;
     private bool _operationResult;
 
     public ChargeStationManagementSteps(CommonHooks hooks)
@@ -41,16 +41,9 @@ public class ChargeStationManagementSteps
     [Given(@"I have a group with name ""(.*)"" and capacity (.*)")]
     public async Task GivenIHaveAGroupWithNameAndCapacity(string name, int capacity)
     {
-        var result = await _groupService.AddGroup(new Group(name, capacity));
-        _currentGroup = result?.Data;
-    }
-
-    [When(@"I add a charge station named ""(.*)"" with capacity (.*)")]
-    public async Task WhenIAddAChargeStationNamedWithCapacity(string stationName, int capacity)
-    {
-        _currentStation = new ChargeStation(stationName);
-        var result = await _chargeStationService.AddChargeStation(Guid.Parse(_currentGroup.Id), _currentStation);
-        _operationResult = result.IsSuccess;
+        var groupList = new List<Group> { new Group(name, capacity) };
+        var result = await _groupService.AddGroup(groupList);
+        _currentGroup = result?.Data?.FirstOrDefault();
     }
 
     [Then(@"the station should be added successfully")]
@@ -59,11 +52,20 @@ public class ChargeStationManagementSteps
         Assert.IsTrue(_operationResult, "The station was not added successfully.");
     }
 
-    [Given(@"the group has a charge station named ""(.*)""")]
-    public async Task GivenTheGroupHasAChargeStationNamed(string stationName)
+    [Given(@"the group has a charge station named ""(.*)"" with the following connectors:")]
+    [When(@"the group has a charge station named ""(.*)"" with the following connectors:")]
+    public async Task GivenTheGroupHasAChargeStationNamedWithTheFollowingConnectors(string stationName, Table table)
     {
-        _currentStation = new ChargeStation(stationName);
-        await _chargeStationService.AddChargeStation(Guid.Parse(_currentGroup.Id), _currentStation);
+        var connectors = table.Rows.Select(row => new Connector(row["Name"],int.Parse(row["MaxCurrentAmps"]))).ToList();
+
+        _currentStation = new ChargeStation(stationName)
+        {
+            Connectors = connectors
+        };
+
+        var result = await _chargeStationService.AddChargeStation(Guid.Parse(_currentGroup.Id), _currentStation);
+        _currentStation = result.Data;
+        _operationResult = result.Data == null ? false : true;
     }
 
     [When(@"I update the station's name to ""(.*)""")]
@@ -97,23 +99,6 @@ public class ChargeStationManagementSteps
         var group = await _groupService.GetGroupById(Guid.Parse(_currentGroup.Id));
         var stationExists = group?.Data?.ChargeStations.Any(s => s.Id == _currentStation.Id);
         Assert.IsFalse(stationExists, "The station still exists in the group.");
-    }
-
-    [Given(@"the charge station ""(.*)"" has the following connectors:")]
-    public async Task GivenTheChargeStationHasTheFollowingConnectors(string stationName, Table table)
-    {
-        var group = await _groupService.GetGroupById(Guid.Parse(_currentGroup.Id));
-        var station = group?.Data?.ChargeStations.FirstOrDefault(s => s.Name == stationName);
-        Assert.IsNotNull(station, $"Charge station {stationName} does not exist in the group.");
-
-        foreach (var row in table.Rows)
-        {
-            var maxCurrentAmps = int.Parse(row["MaxCurrentAmps"]);
-            var connector = new Connector{
-                MaxCurrentAmps = maxCurrentAmps
-            };
-            await _connectorService.AddConnector(Guid.Parse(station.Id), connector);
-        }
     }
 
     [Then(@"no connectors should remain in the group")]

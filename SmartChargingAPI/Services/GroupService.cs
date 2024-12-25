@@ -19,12 +19,22 @@ public class GroupService : IGroupService
         _logger.LogInformation("GroupService initialized.");
     }
 
-    public async Task<ValidationResult<Group>> AddGroup(Group newGroup)
+   public async Task<ValidationResult<List<Group>>> AddGroup(List<Group> newGroups)
+{
+    _logger.LogInformation("Attempting to add a list of groups.");
+
+    var addedGroups = new List<Group>();
+
+    foreach (var newGroup in newGroups)
     {
         _logger.LogInformation("Adding a new group with name {Name} and capacity {CapacityAmps}.", newGroup.Name, newGroup.CapacityAmps);
 
         var validationMessage = GroupValidation.ValidateGroupCreation(newGroup.Name, newGroup.CapacityAmps, _logger);
-        if (validationMessage != null) return ValidationResult<Group>.Failure(validationMessage);
+        if (validationMessage != null)
+        {
+            _logger.LogWarning("Validation failed for group {Name}: {ValidationMessage}", newGroup.Name, validationMessage);
+            return ValidationResult<List<Group>>.Failure($"Validation failed for group {newGroup.Name}: {validationMessage}");
+        }
 
         var group = new Group(newGroup.Name, newGroup.CapacityAmps)
         {
@@ -34,8 +44,12 @@ public class GroupService : IGroupService
         var addedGroup = await _groupRepository.AddAsync(group);
         _logger.LogInformation("Group added successfully with ID {GroupId}.", addedGroup.Id);
 
-        return ValidationResult<Group>.Success(addedGroup);
+        addedGroups.Add(addedGroup);
     }
+
+    return ValidationResult<List<Group>>.Success(addedGroups);
+}
+
 
     public async Task<ValidationResult<bool>> RemoveGroup(Guid groupId)
     {

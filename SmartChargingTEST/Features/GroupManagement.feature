@@ -28,27 +28,24 @@ Feature: Group Management
   Scenario: Update a group's capacity below its current usage
     Given I have a group with name "Group A" and capacity 100
     And I add the group
-    And the group has the following charge stations:
-      | Name         | Capacity |
-      | Station A    | 50       |
-      | Station B    | 50       |
+    And the group has a charge station named "Station A" with the following connectors:
+      | MaxCurrentAmps | Name |
+      | 50             |  C   |
+    And the group has a charge station named "Station B" with the following connectors:
+      | MaxCurrentAmps | Name |
+      | 50             |  D   |
     When I update the group to have capacity 90
     Then the update should fail
 
   Scenario: Delete a group and ensure all associated charge stations and connectors are removed
   Given I have a group with name "Group A" and capacity 150
   And I add the group
-  And the group has the following charge stations:
-    | Name       | Capacity |
-    | Station A  | 50       |
-    | Station B  | 50       |
-  And the charge station "Station A" has the following connectors:
-    | Id | MaxCurrentAmps |
-    | 1  | 10             |
-    | 2  | 20             |
-  And the charge station "Station B" has the following connectors:
-    | Id | MaxCurrentAmps |
-    | 1  | 15             |
+  And the group has a charge station named "Station A" with the following connectors:
+    | MaxCurrentAmps | Name |
+    | 50             |  C   |
+  And the group has a charge station named "Station B" with the following connectors:
+    | MaxCurrentAmps | Name |
+    | 50             |  D   |
   When I delete the group
   Then the group should no longer exist
   And no charge stations or connectors should remain
