@@ -2,7 +2,6 @@ using SmartChargingAPI.Models;
 using TechTalk.SpecFlow;
 using SmartChargingAPI.IServices;
 using SmartChargingAPI.Services;
-using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using Moq;
 using Microsoft.Extensions.Logging;
@@ -32,7 +31,6 @@ public class ConnectorManagementSteps
         _chargeStationService = new ChargeStationService(
             _groupRepository,
             _chargeStationRepository,
-            _groupService,
             new Mock<ILogger<ChargeStationService>>().Object);
         _connectorService = new ConnectorService(
             _groupRepository,

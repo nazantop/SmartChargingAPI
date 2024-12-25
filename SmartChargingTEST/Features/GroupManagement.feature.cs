@@ -187,7 +187,7 @@ namespace SmartChargingTEST.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Update a group\'s capacity below its current usage")]
-        public void UpdateAGroupsCapacityBelowItsCurrentUsage()
+        public void UpdateAGroupsCapacityBelowİtsCurrentUsage()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();

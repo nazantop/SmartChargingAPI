@@ -62,11 +62,11 @@ namespace SmartChargingAPI.Helpers.Validations
             return null;
         }
 
-        public static string? ValidateConnectorMaxCurrent(Connector connector, ILogger logger)
+        public static string? ValidateConnectorMaxCurrent(List<Connector> connectors, ILogger logger)
         {
-            if (connector.MaxCurrentAmps <= 0)
+            if (connectors.Any(x=> x.MaxCurrentAmps <= 0 || x.MaxCurrentAmps ==null))
             {
-                var errorMessage = $"Connector max current must be greater than zero. Provided: {connector.MaxCurrentAmps}";
+                var errorMessage = $"Connector max current must be greater than zero.";
                 logger.LogWarning(errorMessage);
                 return errorMessage;
             }

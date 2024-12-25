@@ -12,7 +12,7 @@ public static class GroupValidation
             return "Group name is required.";
         }
 
-        if (capacityAmps <= 0)
+        if (capacityAmps <= 0 || capacityAmps == null)
         {
             logger.LogWarning("Group capacity {CapacityAmps} is invalid.", capacityAmps);
             return "Group capacity must be greater than zero.";

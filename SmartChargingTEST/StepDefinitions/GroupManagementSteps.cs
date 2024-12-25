@@ -4,7 +4,6 @@ using Moq;
 using SmartChargingAPI.Models;
 using SmartChargingAPI.Repositories.Interfaces;
 using SmartChargingAPI.Services;
-using NUnit.Framework;
 using SmartChargingAPI.IServices;
 
 [Binding]
@@ -13,7 +12,6 @@ public class GroupManagementSteps
 {
     private readonly IGroupService _groupService;
     private readonly IChargeStationService _chargeStationService;
-    private readonly IConnectorService _connectorService;
     private readonly IGroupRepository _groupRepository;
     private readonly IChargeStationRepository _chargeStationRepository;
 
@@ -30,12 +28,7 @@ public class GroupManagementSteps
         _chargeStationService = new ChargeStationService(
             _groupRepository,
             _chargeStationRepository,
-            _groupService,
             new Mock<ILogger<ChargeStationService>>().Object);
-        _connectorService = new ConnectorService(
-            _groupRepository,
-            _chargeStationRepository,
-            new Mock<ILogger<ConnectorService>>().Object);
     }
 
     [Given(@"I have a group with name ""(.*)"" and capacity (.*)")]

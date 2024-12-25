@@ -10,14 +10,12 @@ public class ChargeStationService : IChargeStationService
 {
     private readonly IChargeStationRepository _chargeStationRepository;
     private readonly IGroupRepository _groupRepository;
-    private readonly IGroupService _groupService;
     private readonly ILogger<ChargeStationService> _logger;
 
-    public ChargeStationService(IGroupRepository groupRepository,IChargeStationRepository chargeStationRepository, IGroupService groupService, ILogger<ChargeStationService> logger)
+    public ChargeStationService(IGroupRepository groupRepository,IChargeStationRepository chargeStationRepository, ILogger<ChargeStationService> logger)
     {
         _groupRepository = groupRepository;
         _chargeStationRepository = chargeStationRepository;
-        _groupService = groupService;
         _logger = logger;
         _logger.LogInformation("ChargeStationService initialized.");
     }
@@ -38,10 +36,12 @@ public class ChargeStationService : IChargeStationService
             .SelectMany(cs => cs.Connectors)
             .Sum(c => c.MaxCurrentAmps) ?? 0;
 
+        
+        validationMessage = ConnectorValidation.ValidateConnectorMaxCurrent(chargeStation.Connectors, _logger);
+        if (validationMessage != null) return ValidationResult<ChargeStation>.Failure(validationMessage);
+
         foreach (var connectorRequest in chargeStation.Connectors)
         {
-            validationMessage = ConnectorValidation.ValidateConnectorMaxCurrent(connectorRequest, _logger);
-            if (validationMessage != null) return ValidationResult<ChargeStation>.Failure(validationMessage);
 
             validationMessage = ConnectorValidation.ValidateAddingConnectorExceedsCapacity(
                 totalGroupCapacity,

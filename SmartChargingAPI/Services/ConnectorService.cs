@@ -45,6 +45,9 @@ namespace SmartChargingAPI.Services
             validationMessage = ConnectorValidation.ValidateConnectorCount(station.Connectors, _logger);
             if (validationMessage != null) return ValidationResult<Connector>.Failure(validationMessage);
 
+            validationMessage = ConnectorValidation.ValidateConnectorMaxCurrent(station.Connectors, _logger);
+            if (validationMessage != null) return ValidationResult<Connector>.Failure(validationMessage);
+
             var semaphore = GetOrCreateSemaphore(stationId);
             await semaphore.WaitAsync();
             try
@@ -89,6 +92,12 @@ namespace SmartChargingAPI.Services
 
             var connector = station?.Connectors.FirstOrDefault(c => c.Id == updatedConnector.Id);
             validationMessage = ConnectorValidation.ValidateConnectorExists(station, updatedConnector.Id, _logger);
+            if (validationMessage != null) return ValidationResult<bool>.Failure(validationMessage);
+
+            validationMessage = ConnectorValidation.ValidateConnectorMaxCurrent([updatedConnector], _logger);
+            if (validationMessage != null) return ValidationResult<bool>.Failure(validationMessage);
+
+            validationMessage = ConnectorValidation.ValidateConnectorCount(station?.Connectors, _logger);
             if (validationMessage != null) return ValidationResult<bool>.Failure(validationMessage);
 
             var semaphore = GetOrCreateSemaphore(stationId);
