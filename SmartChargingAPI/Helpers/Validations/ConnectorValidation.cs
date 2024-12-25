@@ -39,7 +39,7 @@ namespace SmartChargingAPI.Helpers.Validations
             return null;
         }
 
-        public static string? ValidateConnectorOnRemove(ChargeStation? station, string connectorId, ILogger logger)
+        public static string? ValidateConnectorOnRemove(ChargeStation? station, ILogger logger)
         {
              if (station?.Connectors.Count <= 1){ 
                 logger.LogWarning("Cannot remove the last connector from station {StationId}. Delete the charge station instead.", station.Id);

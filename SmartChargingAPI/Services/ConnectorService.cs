@@ -132,7 +132,7 @@ namespace SmartChargingAPI.Services
             validationMessage = ConnectorValidation.ValidateConnectorExists(station, connectorId.ToString(), _logger);
             if (validationMessage != null) return ValidationResult<bool>.Failure(validationMessage);
 
-             validationMessage = ConnectorValidation.ValidateConnectorOnRemove(station, connectorId.ToString(), _logger);
+             validationMessage = ConnectorValidation.ValidateConnectorOnRemove(station, _logger);
             if (validationMessage != null) return ValidationResult<bool>.Failure(validationMessage);
 
             var semaphore = GetOrCreateSemaphore(stationId);
