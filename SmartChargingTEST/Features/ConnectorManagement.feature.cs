@@ -95,11 +95,9 @@ namespace SmartChargingTEST.Features
     testRunner.Given("I have a group with name \"Group A\" and capacity 150", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
                             "MaxCurrentAmps",
                             "Name"});
                 table5.AddRow(new string[] {
-                            "1",
                             "50",
                             "C"});
 #line 8
@@ -136,11 +134,9 @@ namespace SmartChargingTEST.Features
     testRunner.Given("I have a group with name \"Group A\" and capacity 150", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
                             "MaxCurrentAmps",
                             "Name"});
                 table6.AddRow(new string[] {
-                            "1",
                             "50",
                             "C"});
 #line 16
@@ -177,11 +173,9 @@ namespace SmartChargingTEST.Features
     testRunner.Given("I have a group with name \"Group A\" and capacity 150", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
                             "MaxCurrentAmps",
                             "Name"});
                 table7.AddRow(new string[] {
-                            "1",
                             "50",
                             "C"});
 #line 24
@@ -218,11 +212,9 @@ namespace SmartChargingTEST.Features
     testRunner.Given("I have a group with name \"Group A\" and capacity 100", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
                             "MaxCurrentAmps",
                             "Name"});
                 table8.AddRow(new string[] {
-                            "1",
                             "50",
                             "C"});
 #line 32
