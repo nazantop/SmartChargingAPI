@@ -43,7 +43,7 @@ public class ConnectorManagementSteps
     [Given(@"I have a group with name ""(.*)"" and capacity (.*)")]
     public async Task GivenIHaveAGroupWithNameAndCapacity(string name, int capacity)
     {
-        var groupList = new List<Group> { new Group(name, capacity) };
+        var groupList = new List<Group> { new Group{ Name = name, CapacityAmps = capacity}};
         var result = await _groupService.AddGroup(groupList);
         _currentGroup = result?.Data.FirstOrDefault();
     }
@@ -51,12 +51,9 @@ public class ConnectorManagementSteps
     [Given(@"the group has a charge station named ""(.*)"" with the following connectors:")]
     public async Task GivenTheGroupHasAChargeStationNamedWithConnectors(string stationName, Table table)
     {
-       var connectors = table.Rows.Select(row => new Connector(row["Name"],int.Parse(row["MaxCurrentAmps"]))).ToList();
+       var connectors = table.Rows.Select(row => new Connector{ MaxCurrentAmps = int.Parse(row["MaxCurrentAmps"])}).ToList();
 
-        _currentStation = new ChargeStation(stationName)
-        {
-            Connectors = connectors
-        };
+        _currentStation = new ChargeStation{Connectors = connectors};
 
         var result = await _chargeStationService.AddChargeStation(Guid.Parse(_currentGroup.Id), _currentStation);
         _currentStation = result.Data;
@@ -67,7 +64,7 @@ public class ConnectorManagementSteps
     [When(@"I add a connector with ID (.*) and max current (.*)")]
     public async Task WhenIAddAConnectorWithIDAndMaxCurrent(int id, int maxCurrent)
     {
-        var connector = new Connector(id.ToString(), maxCurrent);
+        var connector = new Connector{ Id = id.ToString(), MaxCurrentAmps = maxCurrent};
         var result = await _connectorService.AddConnector(Guid.Parse(_currentStation.Id), connector);
         _currentConnector = result.Data;
         _operationResult = _currentConnector != null;
@@ -82,7 +79,7 @@ public class ConnectorManagementSteps
     [Given(@"the station has a connector with ID (.*) and max current (.*)")]
     public async Task GivenTheStationHasAConnectorWithIDAndMaxCurrent(int id, int maxCurrent)
     {
-        var connector = new Connector(id.ToString(), maxCurrent);
+        var connector = new Connector{ Id =id.ToString(), MaxCurrentAmps =maxCurrent};
         var result = await _connectorService.AddConnector(Guid.Parse(_currentStation.Id), connector);
         _currentConnector = result?.Data;
         Assert.IsNotNull(_currentConnector, "The connector was not added to the station.");

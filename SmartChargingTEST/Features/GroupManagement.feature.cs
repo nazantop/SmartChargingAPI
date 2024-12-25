@@ -187,7 +187,7 @@ namespace SmartChargingTEST.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Update a group\'s capacity below its current usage")]
-        public void UpdateAGroupsCapacityBelowİtsCurrentUsage()
+        public void UpdateAGroupsCapacityBelowItsCurrentUsage()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
@@ -209,20 +209,16 @@ namespace SmartChargingTEST.Features
     testRunner.And("I add the group", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
                 TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
-                            "MaxCurrentAmps",
-                            "Name"});
+                            "MaxCurrentAmps"});
                 table11.AddRow(new string[] {
-                            "50",
-                            "C"});
+                            "50"});
 #line 31
     testRunner.And("the group has a charge station named \"Station A\" with the following connectors:", ((string)(null)), table11, "And ");
 #line hidden
                 TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
-                            "MaxCurrentAmps",
-                            "Name"});
+                            "MaxCurrentAmps"});
                 table12.AddRow(new string[] {
-                            "50",
-                            "D"});
+                            "50"});
 #line 34
     testRunner.And("the group has a charge station named \"Station B\" with the following connectors:", ((string)(null)), table12, "And ");
 #line hidden
@@ -262,20 +258,16 @@ namespace SmartChargingTEST.Features
   testRunner.And("I add the group", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
                 TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
-                            "MaxCurrentAmps",
-                            "Name"});
+                            "MaxCurrentAmps"});
                 table13.AddRow(new string[] {
-                            "50",
-                            "C"});
+                            "50"});
 #line 43
   testRunner.And("the group has a charge station named \"Station A\" with the following connectors:", ((string)(null)), table13, "And ");
 #line hidden
                 TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
-                            "MaxCurrentAmps",
-                            "Name"});
+                            "MaxCurrentAmps"});
                 table14.AddRow(new string[] {
-                            "50",
-                            "D"});
+                            "50"});
 #line 46
   testRunner.And("the group has a charge station named \"Station B\" with the following connectors:", ((string)(null)), table14, "And ");
 #line hidden

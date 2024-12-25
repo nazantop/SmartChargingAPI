@@ -4,18 +4,6 @@ namespace SmartChargingAPI.Helpers.Validations
 {
     public static class ConnectorValidation
     {
-        public static string? ValidateConnectorLimit(ChargeStation station, Guid stationId, ILogger logger)
-        {
-            if (station.Connectors.Count >= 5)
-            {
-                var errorMessage = $"Station {stationId} already has the maximum number of connectors.";
-                logger.LogWarning(errorMessage);
-                return errorMessage;
-            }
-
-            return null;
-        }
-
         public static string? ValidateGroupCapacity(Group? group, ChargeStation? station, ILogger logger)
         {
             if (group == null || station == null)
@@ -51,6 +39,17 @@ namespace SmartChargingAPI.Helpers.Validations
             return null;
         }
 
+        public static string? ValidateConnectorOnRemove(ChargeStation? station, string connectorId, ILogger logger)
+        {
+             if (station?.Connectors.Count <= 1){ 
+                logger.LogWarning("Cannot remove the last connector from station {StationId}. Delete the charge station instead.", station.Id);
+                var errorMessage = "Cannot remove the last connector from a charge station. Delete the charge station instead.";
+                return errorMessage;
+                }
+
+            return null;
+        }
+
         public static string? ValidateConnectorCount(List<Connector>? connectors, ILogger logger)
         {
             if (connectors == null || connectors.Count < 1 || connectors.Count > 5)
@@ -75,7 +74,7 @@ namespace SmartChargingAPI.Helpers.Validations
             return null;
         }
 
-        public static string? ValidateAddingConnectorExceedsCapacity(int totalGroupCapacity, int maxCurrentAmps, int groupCapacity, ILogger logger)
+        public static string? ValidateAddingConnectorExceedsCapacity(int totalGroupCapacity, int? maxCurrentAmps, int? groupCapacity, ILogger logger)
         {
             if (totalGroupCapacity + maxCurrentAmps > groupCapacity)
             {

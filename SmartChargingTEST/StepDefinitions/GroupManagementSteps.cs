@@ -41,7 +41,7 @@ public class GroupManagementSteps
     [Given(@"I have a group with name ""(.*)"" and capacity (.*)")]
     public void GivenIHaveAGroupWithNameAndCapacity(string name, int capacity)
     {
-        _currentGroup = new Group(name, capacity);
+        _currentGroup = new Group{ Name = name, CapacityAmps =capacity};
     }
 
     [When(@"I add the group")]
@@ -57,12 +57,9 @@ public class GroupManagementSteps
     [Given(@"the group has a charge station named ""(.*)"" with the following connectors:")]
     public async Task WhenIAddAChargeStationNamedWithTheFollowingConnectors(string stationName, Table table)
     {
-        var connectors = table.Rows.Select(row => new Connector(row["Name"],int.Parse(row["MaxCurrentAmps"]))).ToList();
+       var connectors = table.Rows.Select(row => new Connector{ MaxCurrentAmps = int.Parse(row["MaxCurrentAmps"])}).ToList();
    
-        var station = new ChargeStation(stationName)
-        {
-            Connectors = connectors
-        };
+        var station = new ChargeStation{ Name = stationName, Connectors = connectors}; 
 
         var result = await _chargeStationService.AddChargeStation(Guid.Parse(_currentGroup.Id), station);
         _operationResult = result.IsSuccess;
@@ -77,7 +74,7 @@ public class GroupManagementSteps
     [Given(@"I have the following groups:")]
     public async Task GivenIHaveTheFollowingGroups(Table table)
     {
-        var groupList = table.Rows.Select(row => new Group(row["Name"], int.Parse(row["Capacity"]))).ToList();
+        var groupList = table.Rows.Select(row => new Group{ Name = row["Name"], CapacityAmps =int.Parse(row["Capacity"])}).ToList();
         await _groupService.AddGroup(groupList);
     }
 
@@ -103,7 +100,7 @@ public class GroupManagementSteps
     [When(@"I update the group to have name ""(.*)"" and capacity (.*)")]
     public async Task WhenIUpdateTheGroupToHaveNameAndCapacity(string newName, int newCapacity)
     {
-        var result = await _groupService.UpdateGroup(new Guid(_currentGroup.Id), new Group(newName, newCapacity));
+        var result = await _groupService.UpdateGroup(new Guid(_currentGroup.Id), new Group{ Name = newName, CapacityAmps =newCapacity});
         _operationResult = result.IsSuccess;
     }
 

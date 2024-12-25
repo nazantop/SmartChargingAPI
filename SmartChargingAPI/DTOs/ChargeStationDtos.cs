@@ -2,9 +2,9 @@ namespace SmartChargingAPI.DTOs
 {
     public class ChargeStationRequestDto
     {
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
-        public List<ConnectorRequestDto>? Connectors { get; set; }
+        public required List<ConnectorRequestDto> Connectors { get; set; }
     }
 
     public class ChargeStationResponseDto

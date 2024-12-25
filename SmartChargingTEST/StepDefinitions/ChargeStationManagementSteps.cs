@@ -41,7 +41,7 @@ public class ChargeStationManagementSteps
     [Given(@"I have a group with name ""(.*)"" and capacity (.*)")]
     public async Task GivenIHaveAGroupWithNameAndCapacity(string name, int capacity)
     {
-        var groupList = new List<Group> { new Group(name, capacity) };
+        var groupList = new List<Group> { new Group{ Name = name, CapacityAmps = capacity} };
         var result = await _groupService.AddGroup(groupList);
         _currentGroup = result?.Data?.FirstOrDefault();
     }
@@ -56,12 +56,9 @@ public class ChargeStationManagementSteps
     [When(@"the group has a charge station named ""(.*)"" with the following connectors:")]
     public async Task GivenTheGroupHasAChargeStationNamedWithTheFollowingConnectors(string stationName, Table table)
     {
-        var connectors = table.Rows.Select(row => new Connector(row["Name"],int.Parse(row["MaxCurrentAmps"]))).ToList();
+        var connectors = table.Rows.Select(row => new Connector{ MaxCurrentAmps = int.Parse(row["MaxCurrentAmps"])}).ToList();
 
-        _currentStation = new ChargeStation(stationName)
-        {
-            Connectors = connectors
-        };
+        _currentStation = new ChargeStation{Name = stationName, Connectors = connectors};
 
         var result = await _chargeStationService.AddChargeStation(Guid.Parse(_currentGroup.Id), _currentStation);
         _currentStation = result.Data;
@@ -71,7 +68,7 @@ public class ChargeStationManagementSteps
     [When(@"I update the station's name to ""(.*)""")]
     public async Task WhenIUpdateTheStationSNameTo(string newName)
     {
-        var chargeStation = new ChargeStation(newName);
+        var chargeStation = new ChargeStation{ Name = newName};
         var result = await _chargeStationService.UpdateChargeStation(Guid.Parse(_currentStation.Id), chargeStation);
         _operationResult = result.IsSuccess;
         if (_operationResult)

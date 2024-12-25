@@ -13,8 +13,8 @@ namespace SmartChargingAPI.DTOs
     }
     public class GroupRequestDto
     {
-        public string Name { get; set; }
-        public int CapacityAmps { get; set; }
+        public string? Name { get; set; }
+        public int? CapacityAmps { get; set; }
 
     }
 }

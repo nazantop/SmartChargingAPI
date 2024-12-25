@@ -42,7 +42,7 @@ namespace SmartChargingAPI.Services
 
             var station = group?.ChargeStations.FirstOrDefault(cs => cs.Id == stationId.ToString());
 
-            validationMessage = ConnectorValidation.ValidateConnectorLimit(station, stationId, _logger);
+            validationMessage = ConnectorValidation.ValidateConnectorCount(station.Connectors, _logger);
             if (validationMessage != null) return ValidationResult<Connector>.Failure(validationMessage);
 
             var semaphore = GetOrCreateSemaphore(stationId);
@@ -52,7 +52,7 @@ namespace SmartChargingAPI.Services
                 var existingIds = station.Connectors.Select(c => c.Id).ToHashSet();
                 var nextId = Enumerable.Range(1, 5).First(id => !existingIds.Contains(id.ToString()));
 
-                var newConnector = new Connector(nextId.ToString(), connector.MaxCurrentAmps);
+                var newConnector = new Connector{ Id = nextId.ToString(),MaxCurrentAmps =  connector.MaxCurrentAmps};
                 station.Connectors.Add(newConnector);
 
                 validationMessage = ConnectorValidation.ValidateGroupCapacity(group, station, _logger);
@@ -130,6 +130,9 @@ namespace SmartChargingAPI.Services
             var station = group?.ChargeStations.FirstOrDefault(cs => cs.Id == stationId.ToString());
 
             validationMessage = ConnectorValidation.ValidateConnectorExists(station, connectorId.ToString(), _logger);
+            if (validationMessage != null) return ValidationResult<bool>.Failure(validationMessage);
+
+             validationMessage = ConnectorValidation.ValidateConnectorOnRemove(station, connectorId.ToString(), _logger);
             if (validationMessage != null) return ValidationResult<bool>.Failure(validationMessage);
 
             var semaphore = GetOrCreateSemaphore(stationId);

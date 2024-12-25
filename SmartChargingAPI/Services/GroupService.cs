@@ -36,10 +36,7 @@ public class GroupService : IGroupService
             return ValidationResult<List<Group>>.Failure($"Validation failed for group {newGroup.Name}: {validationMessage}");
         }
 
-        var group = new Group(newGroup.Name, newGroup.CapacityAmps)
-        {
-            ChargeStations = new List<ChargeStation>()
-        };
+        var group = new Group{Name = newGroup.Name, CapacityAmps = newGroup.CapacityAmps, ChargeStations = []};
 
         var addedGroup = await _groupRepository.AddAsync(group);
         _logger.LogInformation("Group added successfully with ID {GroupId}.", addedGroup.Id);
@@ -100,8 +97,12 @@ public class GroupService : IGroupService
         _logger.LogInformation("Attempting to update group with ID {GroupId}.", groupId);
 
         var group = await GetGroupById(groupId);
+
+        if (updatedGroup.CapacityAmps == null) updatedGroup.CapacityAmps = group.Data.CapacityAmps; 
         var validationMessage = GroupValidation.ValidateGroupForUpdate(group.Data, updatedGroup.CapacityAmps, _logger);
         if (validationMessage != null) return ValidationResult<bool>.Failure(validationMessage);
+
+        if (string.IsNullOrWhiteSpace(updatedGroup.Name)) updatedGroup.Name = group.Data.Name; 
 
         var updateDefinition = Builders<Group>.Update
             .Set(g => g.Name, updatedGroup.Name)

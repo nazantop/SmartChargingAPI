@@ -29,11 +29,11 @@ Feature: Group Management
     Given I have a group with name "Group A" and capacity 100
     And I add the group
     And the group has a charge station named "Station A" with the following connectors:
-      | MaxCurrentAmps | Name |
-      | 50             |  C   |
+      | MaxCurrentAmps |
+      | 50             |
     And the group has a charge station named "Station B" with the following connectors:
-      | MaxCurrentAmps | Name |
-      | 50             |  D   |
+      | MaxCurrentAmps |
+      | 50             |
     When I update the group to have capacity 90
     Then the update should fail
 
@@ -41,11 +41,11 @@ Feature: Group Management
   Given I have a group with name "Group A" and capacity 150
   And I add the group
   And the group has a charge station named "Station A" with the following connectors:
-    | MaxCurrentAmps | Name |
-    | 50             |  C   |
+    | MaxCurrentAmps |
+    | 50             |
   And the group has a charge station named "Station B" with the following connectors:
-    | MaxCurrentAmps | Name |
-    | 50             |  D   |
+    | MaxCurrentAmps |
+    | 50             |
   When I delete the group
   Then the group should no longer exist
   And no charge stations or connectors should remain

@@ -33,7 +33,7 @@ public class ChargeStationService : IChargeStationService
         validationMessage = ConnectorValidation.ValidateConnectorCount(chargeStation.Connectors, _logger);
         if (validationMessage != null) return ValidationResult<ChargeStation>.Failure(validationMessage);
 
-        var newStation = new ChargeStation(chargeStation.Name);
+        var newStation = new ChargeStation{Name = chargeStation.Name};
         var totalGroupCapacity = group?.ChargeStations
             .SelectMany(cs => cs.Connectors)
             .Sum(c => c.MaxCurrentAmps) ?? 0;
@@ -51,7 +51,7 @@ public class ChargeStationService : IChargeStationService
             if (validationMessage != null) return ValidationResult<ChargeStation>.Failure(validationMessage);
 
             var connectorId = (newStation.Connectors.Count + 1).ToString();
-            newStation.Connectors.Add(new Connector(connectorId, connectorRequest.MaxCurrentAmps));
+            newStation.Connectors.Add(new Connector{ Id = connectorId, MaxCurrentAmps = connectorRequest.MaxCurrentAmps});
             totalGroupCapacity += connectorRequest.MaxCurrentAmps;
         }
 

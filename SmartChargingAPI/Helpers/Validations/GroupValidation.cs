@@ -4,7 +4,7 @@ namespace SmartChargingAPI.Helpers.Validations;
 
 public static class GroupValidation
 {
-    public static string? ValidateGroupCreation(string name, int capacityAmps, ILogger logger)
+    public static string? ValidateGroupCreation(string name, int? capacityAmps, ILogger logger)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -32,7 +32,7 @@ public static class GroupValidation
         return null;
     }
 
-    public static string? ValidateGroupForUpdate(Group? group, int newCapacity, ILogger logger)
+    public static string? ValidateGroupForUpdate(Group? group, int? newCapacity, ILogger logger)
     {
         if (group == null)
         {
